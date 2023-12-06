@@ -50,14 +50,3 @@ public class Vtuber {
 
 }
 
-
-class Member {
-	String name; int donate;
-
-	public Member(String name, int donate) {
-		super();
-		this.name = name;
-		this.donate = donate;
-	}
-	
-}
