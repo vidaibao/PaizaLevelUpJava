@@ -2,37 +2,45 @@ package CumulativeSum;
 
 import java.util.Scanner;
 
-public class TwoDIntervalCumSum {
+public class Donut {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		  
 		int H = sc.nextInt(); int W = sc.nextInt(); int N = sc.nextInt();
 
-		int[][] A = new int[H][W];
-		// 
-		
-		
+		int[][] C = new int[H][W];
+
 		for (int i = 0; i < H; i++) {
 			for (int j = 0; j < W; j++) {
-				A[i][j] = sc.nextInt();
+				C[i][j] = sc.nextInt();
 			}
 		}
 		
-		int[][] S = calculateCumulativeSum(A);
+		int[][] sumC = calculateCumulativeSum(C);
 		
 		// 
 		for (int i = 1; i <= N; i++) {
-			int topLeftRow = sc.nextInt() - 1;
-	        int topLeftCol = sc.nextInt() - 1;
-	        int bottomRightRow = sc.nextInt() - 1;
-	        int bottomRightCol = sc.nextInt() - 1;
-	        int result = calculateIntervalSum(S, topLeftRow, topLeftCol, bottomRightRow, bottomRightCol);
-	        System.out.println(result);
+			int y = sc.nextInt() - 1; int x = sc.nextInt() - 1;
+			int B = sc.nextInt(); int S = sc.nextInt();
+			
+			int topLeftRow = y - S/2;
+	        int topLeftCol = x - S/2;
+	        int bottomRightRow = y + S/2;
+	        int bottomRightCol = x + S/2;
+	        int innerSum = calculateIntervalSum(sumC, topLeftRow, topLeftCol, bottomRightRow, bottomRightCol);
+	        
+	        topLeftRow = y - B/2;
+	        topLeftCol = x - B/2;
+	        bottomRightRow = y + B/2;
+	        bottomRightCol = x + B/2;
+	        int outerSum = calculateIntervalSum(sumC, topLeftRow, topLeftCol, bottomRightRow, bottomRightCol);
+	        
+	        
+	        System.out.println(outerSum - innerSum);
 		}
-		
+				
 		sc.close();
-
 	}
 	
 	
@@ -84,13 +92,3 @@ public class TwoDIntervalCumSum {
     }
 
 }
-
-/*
- * H 行 W 列 の行列 A の 2 つの行・列番号の組 {a , b} , {c , d} における区間和 
- * S({a,b} , {c,d}) (a ≦ c , b ≦ d) を以下の数式・図の通り定義します。
- * 以後 A の y 行 x 列の要素を A[y][x] と表すことにします。
-
-S({a,b} , {c,d}) = 
-A[a][b] + A[a][b+1] + ... + A[a][d] + A[a+1][1] + ... + A[a+1][d] + 
-			... + A[c][1] + ... + A[c][d]
- */
