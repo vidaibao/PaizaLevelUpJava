@@ -3,7 +3,7 @@ package CumulativeSum;
 import java.util.Scanner;
 
 public class DonutBRank {
-
+	// B138:ドーナツ
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		  
@@ -37,3 +37,13 @@ public class DonutBRank {
 	}
 
 }
+/*
+6 4
+####
+#..#
+#..#
+####
+#.##
+####
+1
+*/
