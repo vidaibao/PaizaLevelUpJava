@@ -94,7 +94,7 @@ public class CheapestApples {
 		Arrays.fill(dp, 10000000);
 		
 		dp[0] = 0; //dp[1] = 0; dp[2] = a; dp[3] = 0;
-		for (int i = 2; i < n + 5; i++) { // dp[n+4]
+		for (int i = 2; i < n + 5; i++) { // --> dp[n+4]
 			if (i >= 2) dp[i] = Math.min(dp[i], dp[i-2] + a);
 			if (i >= 5) dp[i] = Math.min(dp[i], dp[i-5] + b);
 		}
