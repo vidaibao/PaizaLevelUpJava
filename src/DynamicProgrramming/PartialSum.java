@@ -65,18 +65,27 @@ else
 	
 	
 	
-	// Subset Sum Problem
+	// Subset Sum Problem		PASSED
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 
 		int n = sc.nextInt(); int x = sc.nextInt();
-		int[] a = new int[n+1];
+		int[] a = new int[n];
 		
 		for (int i = 0; i < n; i++) a[i] = sc.nextInt();
 		sc.close();
 		
-		boolean result = isSubsetSum(a, n, x);
-        System.out.println(result ? "yes" : "no");
+//		boolean result = isSubsetSum(a, n, x);
+//        System.out.println(result ? "yes" : "no");
+		
+		// 部分和問題 2
+		// System.out.println(countSubsetSum(a, n, x));
+		
+		// 部分和問題 3
+		//System.out.println(minSubsetSum(a, n, x));
+		
+		// 部分和問題 4
+		System.out.println(bossSubsetSum(a, n, x));
 	}
 	
 	
@@ -141,5 +150,143 @@ else
 4
 8
 	 */
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * 部分和問題 2 
+	 * 
+	 * 1 ~ n の番号がついた n 個のおもりがあり、おもり i の重さは a_i です。
 
+おもりを何個か選んで重さの和が x となるようにする方法が何通りあるか求めてください。なお、同じおもりを2個以上選ぶことはできません。
+
+重さが同じおもりが複数存在する場合、それらは区別して別のものとして扱うことにします。
+
+答えは非常に大きくなる可能性があるので、答えを 1,000,000,007 で割った余りで出力してください。
+	 * */
+	static int countSubsetSum(int[] a, int n, int x) {
+		
+		int[] dp = new int[x + 1];
+        //Arrays.fill(dp, 0);
+        dp[0] = 1; // Có một cách để có tổng bằng 0 (chọn 0 phần tử)
+
+        for (int i = 0; i < n; i++) {
+        	// xem xét tất cả các tổng có thể được tạo ra từ các phần tử trước đó và 
+        	// có thể thêm phần tử hiện tại a[i] vào
+        	for (int j = x; j >= a[i]; j--) {
+                dp[j] += dp[j - a[i]];
+                dp[j] %= 1000000007;
+            }
+        }
+
+        return dp[x];
+	}
+	/*
+	入力例1
+5 10
+7
+3
+4
+3
+2
+
+	出力例1
+	3
+	*/	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * 部分和問題 3
+	 * 
+	 * 1 ~ n の番号がついた n 個のおもりがあり、おもり i の重さは a_i です。
+
+おもりを何個か選んで重さの和が x となるようにする方法を考えたとき、選ぶおもりの個数の最小値を出力してください。
+なお、同じおもりを2個以上選ぶことはできません。
+
+なお、重さの和が x となるようにおもりを選ぶ方法が存在しない場合は-1と出力してください。
+	 * */
+
+	static int minSubsetSum(int[] a, int n, int x) {
+		int[] dp = new int[x + 1];
+        Arrays.fill(dp, n + 1);
+        dp[0] = 0; // Có 0 min cách để có tổng bằng 0 (chọn ?min phần tử)
+
+        for (int w : a) {
+        	// xem xét tất cả các tổng có thể được tạo ra từ các phần tử trước đó và 
+        	// có thể thêm phần tử hiện tại a[i] vào
+        	for (int j = x; j >= w; j--) {
+        		if (dp[j - w] != n + 1)
+        			dp[j] = Math.min(dp[j], dp[j - w] + 1);
+            }
+        }
+
+        return (dp[x] == n + 1 ? -1 : dp[x]);
+	}
+	
+	
+	
+	
+	
+	
+	/*
+	 * 【部分和】部分和問題 4
+	 * 
+	 * 1 ~ n の番号がついた n 種類のおもりがあり、おもり i の重さは a_i です。それぞれのおもりは無限個存在しており、
+	 * 任意のおもりを任意の個数使うことができます。
+
+	このとき、おもりを選んで重さの和を x となるようにすることができるかどうか判定してください。
+	 * */
+	static String bossSubsetSum(int[] a, int n, int x) {
+		boolean[] dp = new boolean[x + 1];
+		Arrays.fill(dp, false);
+        dp[0] = true; // Có cách để có tổng bằng 0 (chọn 0 phần tử)
+
+        for (int w : a) {
+        	// xem xét tất cả các tổng có thể được tạo ra từ các phần tử trước đó và 
+        	// có thể thêm phần tử hiện tại a[i] vào
+        	for (int j = w; j <= x; j++) {
+        		if (dp[j - w])	dp[j] = true;
+            }
+        }
+
+        return (dp[x] ? "yes" : "no");
+	}
+	/*
+	 * 
+	 * 方針
+おもり k までを用いて重さの和が x となるようにおもりを選ぶことができるかどうかがわかっていれば、おもり k+1 までを用いて
+重さの和が x となるようにおもりを選ぶことができるかどうかがわかりますから、おもり 1 から始めて順におもり n まで計算していけばよいです。
+dp_k[x] を、おもり k までを用いて重さの和が x となるようにおもりを選ぶことができるかどうかを表す真偽値とすると、
+dp_{k-1}[0] ~ dp_{k-1}[x], dp_k[0] ~ dp_k[y (< x)] と dp_k[x] の関係は 
+dp_k[x] = dp_{k-1}[x] or dp_{k-1}[x-a_k] or dp_k[x-a_k] となります。
+dp_1 から dp_k に対応する k 本の1次元配列 (もしくはこれに相当する2次元配列) を用意し、上の漸化式に従って
+問題を解いても良いのですが、部分和問題 1 で考察したようにループの回し方を工夫すると1本の1次元配列でこの問題を解くことができます。
+
+ 入力例1
+5 10
+9
+3
+4
+11
+8
+
+出力例1
+yes
+ */	
 }
+
+
