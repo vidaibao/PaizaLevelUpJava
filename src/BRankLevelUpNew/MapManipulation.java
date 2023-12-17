@@ -8,7 +8,8 @@ public class MapManipulation {
 		// TODO Auto-generated method stub
 		//getOne();
 		//getUpSideDown();
-		getRowColDia();
+		//getRowColDia();
+		gridNumbering();
 	}
 	
 	// 【マップの扱い 1】マップの書き換え・1 マス
@@ -89,17 +90,17 @@ public class MapManipulation {
 		}
         // diagonal to upperLeft y-- x--
         row = y; col = x;
-        while (--row > 0 && --col > 0) {
+        while (--row >= 0 && --col >= 0) {
         	map[row][col] = (map[row][col].equals(".")) ? "#" : ".";
 		}
         // diagonal to upperRight y-- x++
         row = y; col = x;
-        while (--row > 0 && ++col < W) {
+        while (--row >= 0 && ++col < W) {
         	map[row][col] = (map[row][col].equals(".")) ? "#" : ".";
 		}
         // diagonal to bottomLeft y++ x--
         row = y; col = x;
-        while (++row < H && --col > 0) {
+        while (++row < H && --col >= 0) {
         	map[row][col] = (map[row][col].equals(".")) ? "#" : ".";
 		}
         map[y][x] = origin;
@@ -109,6 +110,70 @@ public class MapManipulation {
         }
 	}
 	
+	
+	
+	public static void gridNumbering () {
+		Scanner sc = new Scanner(System.in);
+		int H = sc.nextInt(); int W = sc.nextInt(); int D = sc.nextInt();
+		sc.close();
+		
+		int[][] grid = new int[H][W];
+		
+		int count = 1;
+		if (D == 1) { // D = 1 to upper right
+			for (int y = 0; y < H; y++) { // upper half
+				int row = y; int col = 0;
+				grid[row][col] = count++;
+				while (--row >= 0 && ++col < W) {
+					grid[row][col] = count++;
+				}
+			}
+			for (int x = 1; x < W; x++) { // lower half
+				int row = H-1; int col = x;
+				grid[row][col] = count++;
+				while (--row >= 0 && ++col < W) {
+					grid[row][col] = count++;
+				}
+			}
+		} else if (D == 4) { // D = 4 to bottom left
+			for (int x = 0; x < W; x++) { // upper half
+				int row = 0; int col = x;
+				grid[row][col] = count++;
+				while (++row < H && --col >= 0) {
+					grid[row][col] = count++;
+				}
+			}
+			for (int y = 1; y < H; y++) { // lower half
+				int row = y; int col = W-1;
+				grid[row][col] = count++;
+				while (++row < H && --col >= 0) {
+					grid[row][col] = count++;
+				}
+			}
+		} else if (D == 2) {	// horizontal
+			for (int row = 0; row < H; row++) {
+				for (int col = 0; col < W; col++) {
+					grid[row][col] = count++;
+				}
+			}
+		} else if (D == 3) {	// vertical
+			for (int col = 0; col < W; col++) {
+				for (int row = 0; row < H; row++) {
+					grid[row][col] = count++;
+				}
+			}
+		}
+		
+		// print result
+		for (int y = 0; y < H; y++) {
+			System.out.print(grid[y][0]);
+			for (int x = 1; x < W; x++) {
+				System.out.print(" " + grid[y][x]);
+			}
+			System.out.println();
+		}
+		
+	}
 	
 	
 
